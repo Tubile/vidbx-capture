@@ -1,12 +1,12 @@
 # Vidbx capture template
 
-Private repo: https://github.com/Tubile/vidbx-capture
+Public repo: https://github.com/Tubile/vidbx-capture
 
 Locked capture page for one business. Intake clones this repo once, fills `slots.json` per business, and runs it. One repo for every client. Do not fork per client. Do not rewrite the HTML/JS/CSS.
 
 ## Setup
 
-1. `git clone https://github.com/Tubile/vidbx-capture.git` (private, account Tubile). Do not put customer captures in it.
+1. `git clone https://github.com/Tubile/vidbx-capture.git` (no GitHub login). Do not put customer captures or slots.json in it.
 2. Copy `slots.example.json` to `slots.json` and fill the business slots (`slug`, `business_name`, `ask`, `time_line`, `rerecord_line`, `result_prompt`, 1–3 `questions`, optional `incentive_line` / thank-you fields). No personal customer names or emails in slots.
 3. Put the logo at `public/logos/{slug}.png`.
 4. Set `logo_url` in `slots.json` to `/logos/{slug}.png`.
