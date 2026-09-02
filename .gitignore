@@ -1,0 +1,7 @@
+slots.json
+data/
+node_modules/
+.env
+*.mp4
+public/logos/*.png
+!public/logos/.gitkeep

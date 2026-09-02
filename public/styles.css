@@ -1,0 +1,719 @@
+/*
+ * Vidbx capture — styles.css (Fable pass, 1 Sep 2026)
+ *
+ * Same flow, same beats. What changed (search "VIDBX:"):
+ * - Brand tokens: --brand comes from slots.brand_color (set by app.js).
+ *   Paper and ink take a 4% / 10% color-mix whisper of the brand hue, so the
+ *   page feels "theirs" while the actual brand color appears in only three
+ *   places: the CTA, the wordmark underline-hairline, and the accent line
+ *   above the ask. Nothing else. That restraint is the rule, not a gap.
+ * - Too-short toast: a pill that rises above the shutter and dissolves.
+ * - Pulse dots under the timer — quiet orientation, not a progress bar UI.
+ * - Timer becomes a chip with a live red dot while recording.
+ * - Record button: soft outer ring breath while recording; square morph kept.
+ * - Type scale tightened; details form and thanks screen refined.
+ */
+
+@font-face {
+  font-family: Heebo;
+  src: url("/fonts/Heebo-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Heebo;
+  src: url("/fonts/Heebo-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Heebo;
+  src: url("/fonts/Heebo-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* Neutral fallbacks — a business with no brand_color gets exactly this. */
+  --paper: #f3eee6;
+  --ink: #171411;
+  --muted: #6f675e;
+  --line: #ddd6cc;
+  --brand: #171411;
+  --cta: #171411;
+  --cta-text: #f6f1ea;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* VIDBX: when app.js validates slots.brand_color it adds .branded to <html>.
+   Paper/ink then carry a whisper of the brand hue — 4% into near-white,
+   10% into near-black. This is the "complementary neighbor" recipe from
+   NOTES.md: related to the brand, never the brand, so the CTA stays special.
+   Browsers without color-mix (none that run this page in 2026, but still)
+   simply keep the neutral fallbacks above. */
+@supports (color: color-mix(in oklab, red 50%, white)) {
+  html.branded {
+    --paper: color-mix(in oklab, var(--brand) 4%, #faf7f2);
+    --ink: color-mix(in oklab, var(--brand) 10%, #16130f);
+    --muted: color-mix(in oklab, var(--brand) 8%, #6f675e);
+    --line: color-mix(in oklab, var(--brand) 10%, #ddd6cc);
+  }
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: Heebo, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 400;
+  direction: rtl;
+  text-align: right;
+}
+
+body {
+  min-height: 100dvh;
+  overflow: hidden;
+}
+
+#app,
+.screen {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  max-width: 430px;
+  margin: 0 auto;
+}
+
+.screen {
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  padding: calc(20px + var(--safe-top)) 28px calc(24px + var(--safe-bottom));
+}
+
+.screen[hidden],
+[hidden] {
+  display: none !important;
+}
+
+.screen-pulse {
+  padding: 0;
+  background: #0b0b0b;
+  max-width: none;
+}
+
+.screen-details {
+  overflow-y: auto;
+}
+
+button,
+.cta,
+.rec-btn,
+.text-btn {
+  touch-action: manipulation;
+}
+
+/* Visible keyboard focus without hurting touch. */
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+/* ------------------------------------------------------------ first screen */
+
+.wordmark {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  color: var(--ink);
+  align-self: center;
+  padding: 0;
+  border: 0;
+  text-align: center;
+}
+
+/* Logo lockup sits in a large quiet circle. No underline bar. */
+.wordmark:has(img) {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--brand) 18%, transparent);
+}
+
+.wordmark img {
+  display: block;
+  width: 78%;
+  height: 78%;
+  object-fit: contain;
+}
+
+.screen-first {
+  justify-content: center;
+  gap: 28px;
+}
+
+.first-spacer {
+  display: none;
+}
+
+.first-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+}
+
+/* VIDBX: brand appearance #2 — one short accent line above the ask.
+   24px, 3px thick. It is the only decoration on the screen. */
+.accent-line {
+  display: none;
+}
+
+.ask {
+  margin: 0;
+  font-size: clamp(32px, 9vw, 42px);
+  font-weight: 700;
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  text-align: center;
+}
+
+.quiet {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--muted);
+  font-weight: 400;
+  text-align: center;
+}
+
+/* Incentive reads a step warmer than the fixed lines, still quiet. */
+.incentive {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.first-bottom {
+  margin-top: 8px;
+  padding-top: 0;
+  width: 100%;
+}
+
+/* VIDBX: brand appearance #3 — the CTA. app.js only paints it with the
+   brand when a text color reaches 4.5:1 on top of it. */
+.cta {
+  display: block;
+  width: 100%;
+  border: 0;
+  background: var(--cta);
+  color: var(--cta-text);
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1;
+  height: 56px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: transform 0.12s ease, opacity 0.12s ease;
+}
+
+.cta:active {
+  transform: scale(0.985);
+}
+
+.screen-first .cta {
+  animation: cta-pulse 2.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .screen-first .cta,
+  .rec-btn.recording::before,
+  .timer-dot,
+  .toast {
+    animation: none !important;
+  }
+}
+
+@keyframes cta-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+.cta:disabled {
+  opacity: 0.45;
+  animation: none;
+}
+
+.cam-error {
+  margin: 0 0 12px;
+  color: #8a2f2f;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.gate-inner,
+.thanks-inner {
+  margin: auto;
+  max-width: 320px;
+  text-align: center;
+}
+
+.gate-inner h1,
+.thanks-line {
+  margin: 0 0 16px;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.gate-inner p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* ------------------------------------------------------------ pulse screen */
+
+.cam-live,
+.cam-review {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #000;
+}
+
+.cam-live.mirror {
+  transform: scaleX(-1);
+}
+
+.cam-scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.32) 0%,
+    rgba(0, 0, 0, 0) 24%,
+    rgba(0, 0, 0, 0) 60%,
+    rgba(0, 0, 0, 0.46) 100%
+  );
+}
+
+/* VIDBX: timer is now a chip; while recording a red dot breathes next to
+   the digits. app.js toggles .recording on it. */
+.cam-timer {
+  position: absolute;
+  top: calc(14px + var(--safe-top));
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  direction: ltr;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  font-variant-numeric: tabular-nums;
+  background: rgba(0, 0, 0, 0.38);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  padding: 6px 12px;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.cam-timer.recording::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #e23b3b;
+  animation: timer-dot 1.2s ease-in-out infinite;
+}
+
+@keyframes timer-dot {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+/* VIDBX: pulse dots — one per pulse, current lit, done ones dimmed full.
+   Orientation only; sits just under the timer chip. */
+.pulse-dots {
+  position: absolute;
+  top: calc(48px + var(--safe-top));
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+  pointer-events: none;
+}
+
+.pulse-dots[hidden] {
+  display: none !important;
+}
+
+.dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.dot.on {
+  background: #fff;
+  transform: scale(1.35);
+}
+
+.dot.done {
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.cam-overlay {
+  position: absolute;
+  top: 36%;
+  right: 24px;
+  left: 24px;
+  margin: 0;
+  text-align: center;
+  color: #fff;
+  font-size: clamp(22px, 6.4vw, 28px);
+  font-weight: 700;
+  line-height: 1.3;
+  text-wrap: balance;
+  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.65);
+  pointer-events: none;
+}
+
+/* VIDBX: too-short toast. Rises above the shutter, dissolves on its own.
+   Sticky errors (camera blocked) keep .show until state changes. */
+.toast {
+  position: absolute;
+  left: 50%;
+  bottom: calc(128px + var(--safe-bottom));
+  transform: translate(-50%, 8px);
+  max-width: min(84vw, 340px);
+  margin: 0;
+  padding: 11px 18px;
+  border-radius: 999px;
+  background: rgba(20, 18, 15, 0.82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.cam-bottom {
+  position: absolute;
+  right: 0;
+  left: 0;
+  bottom: calc(28px + var(--safe-bottom));
+  justify-content: center;
+}
+
+.cam-bottom:not([hidden]) {
+  display: flex;
+}
+
+.cam-bottom[hidden] {
+  display: none !important;
+}
+
+.rec-btn {
+  position: relative;
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  background: transparent;
+  padding: 6px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+/* VIDBX2: shutter dims while the camera is (re)opening — capture is now
+   released during review (audio-route fix), so re-record reopens it. */
+.rec-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* VIDBX: while recording, a soft ring breathes outside the button. */
+.rec-btn.recording::before {
+  content: "";
+  position: absolute;
+  inset: -9px;
+  border-radius: 50%;
+  border: 2px solid rgba(226, 59, 59, 0.55);
+  animation: rec-ring 1.6s ease-out infinite;
+  pointer-events: none;
+}
+
+@keyframes rec-ring {
+  0% {
+    transform: scale(0.92);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.12);
+    opacity: 0;
+  }
+}
+
+.rec-inner {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #e23b3b;
+  transition: border-radius 0.18s ease, transform 0.18s ease;
+}
+
+.rec-btn.recording .rec-inner {
+  border-radius: 8px;
+  transform: scale(0.72);
+  background: #e23b3b;
+}
+
+/* VIDBX: play hint when iOS blocks sound-on autoplay of the review clip. */
+.review-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 72px;
+  height: 72px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.review-play::after {
+  content: "";
+  width: 0;
+  height: 0;
+  border-style: solid;
+  /* RTL page: triangle points left (playback direction is visual, keep
+     the universal "play" triangle pointing toward the left edge start). */
+  border-width: 14px 0 14px 22px;
+  border-color: transparent transparent transparent #fff;
+  margin-left: 5px;
+}
+
+.review-actions {
+  position: absolute;
+  right: 24px;
+  left: 24px;
+  bottom: calc(28px + var(--safe-bottom));
+  flex-direction: column;
+  gap: 10px;
+}
+
+.review-actions:not([hidden]) {
+  display: flex;
+}
+
+.review-actions[hidden] {
+  display: none !important;
+}
+
+.review-actions .cta {
+  background: #fff;
+  color: #171411;
+  animation: none;
+}
+
+.text-btn {
+  border: 0;
+  background: transparent;
+  color: #fff;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  height: 44px;
+  cursor: pointer;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+}
+
+/* ---------------------------------------------------------- details screen */
+
+.details-form {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  margin: auto 0;
+  width: 100%;
+}
+
+.details-title {
+  margin: 0 0 4px;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--ink);
+}
+
+.details-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.details-form input[type="text"],
+.details-form input[type="email"] {
+  width: 100%;
+  height: 52px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 16px;
+  border-radius: 0;
+  padding: 0;
+  transition: border-color 0.15s ease;
+}
+
+.details-form input:focus {
+  outline: none;
+  border-bottom-color: var(--ink);
+}
+
+.consent {
+  flex-direction: row !important;
+  align-items: flex-start;
+  gap: 12px !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  color: var(--ink) !important;
+  line-height: 1.45;
+}
+
+.consent input {
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  flex: 0 0 auto;
+  accent-color: var(--ink);
+}
+
+/* ----------------------------------------------------------- thanks screen */
+
+.thanks-line {
+  font-size: 32px;
+}
+
+.thanks-sub {
+  margin: 0 0 20px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--muted);
+  text-align: center;
+}
+
+.thanks-link {
+  display: inline-block;
+  margin-top: 8px;
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
+  text-decoration-color: var(--brand);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.vidbx-mark {
+  margin: 28px 0 0;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: none;
+  color: var(--muted);
+  text-align: center;
+}
+
+button,
+input[type="text"],
+input[type="email"] {
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.consent input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  margin: 1px 0 0;
+  border: 1.5px solid var(--ink);
+  border-radius: 4px;
+  background: #fff;
+  flex: 0 0 auto;
+}
+
+.consent input[type="checkbox"]:checked {
+  background: var(--ink);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='%23f6f1ea' stroke-width='2' d='M3 8.5l3.2 3.2L13 4.8'/></svg>");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 14px 14px;
+}

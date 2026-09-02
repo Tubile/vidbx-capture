@@ -1,0 +1,18 @@
+{
+  "slug": "example",
+  "business_name": "",
+  "logo_url": "/logos/example.png",
+  "brand_color": "#111111",
+  "ask": "",
+  "time_line": "",
+  "rerecord_line": "",
+  "result_prompt": "",
+  "questions": [
+    "",
+    "",
+    ""
+  ],
+  "incentive_line": "",
+  "thank_you_url": "",
+  "thank_you_label": ""
+}

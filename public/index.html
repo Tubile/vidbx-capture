@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<!--
+  Vidbx capture — index.html (Fable pass, 1 Sep 2026)
+  Same screens, same order, same fields. Search "VIDBX:" for what was added:
+  accent hairline on first screen, pulse dots + toast + play-hint on the
+  camera screen, a one-line title on details, one quiet line on thanks.
+  No new screens. No new form fields.
+-->
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no"
+    />
+    <meta name="theme-color" content="#F3EEE6" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+    <title></title>
+    <link rel="stylesheet" href="/styles.css?v=20260901-noline" />
+  </head>
+  <body>
+    <div id="app">
+      <section class="screen" data-screen="gate" hidden>
+        <div class="gate-inner">
+          <h1>צריך לפתוח בדפדפן</h1>
+          <p>
+            נראה שפתחת את הקישור מתוך אפליקציה (אינסטגרם / פייסבוק / וואטסאפ). כדי להקליט, פתח/י את הקישור בדפדפן Safari או Chrome: לחצ/י על תפריט שלוש הנקודות ובחר/י "פתח בדפדפן".
+          </p>
+        </div>
+      </section>
+
+      <section class="screen screen-first" data-screen="first" hidden>
+        <header class="wordmark" data-el="wordmark"></header>
+        <div class="first-copy">
+          <!-- VIDBX: brand accent — the only decoration on this screen. -->
+          <span class="accent-line" aria-hidden="true"></span>
+          <h1 class="ask" data-el="ask"></h1>
+          <p class="quiet" data-el="time-line"></p>
+          <p class="quiet" data-el="rerecord-line">לא צריך להיות מושלם. אפשר לחזור.</p>
+          <p class="quiet incentive" data-el="incentive" hidden></p>
+        </div>
+        <div class="first-bottom">
+          <p class="cam-error" data-el="first-error" hidden></p>
+          <button type="button" class="cta" data-el="open-camera">
+            לפתיחת המצלמה
+          </button>
+        </div>
+      </section>
+
+      <section class="screen screen-pulse" data-screen="pulse" hidden>
+        <video
+          class="cam-live"
+          data-el="live"
+          autoplay
+          muted
+          playsinline
+          webkit-playsinline
+        ></video>
+        <video
+          class="cam-review"
+          data-el="review"
+          playsinline
+          webkit-playsinline
+          hidden
+        ></video>
+        <div class="cam-scrim"></div>
+        <p class="cam-timer" data-el="timer">0:00</p>
+        <!-- VIDBX: pulse progress dots (orientation only). -->
+        <div class="pulse-dots" data-el="dots" aria-hidden="true"></div>
+        <p class="cam-overlay" data-el="overlay"></p>
+        <!-- VIDBX: was a static hint line; now a toast pill (see styles). -->
+        <div
+          class="toast"
+          data-el="pulse-error"
+          role="status"
+          aria-live="polite"
+          hidden
+        ></div>
+        <!-- VIDBX: shown only if iOS blocks sound-on autoplay of the review. -->
+        <button
+          type="button"
+          class="review-play"
+          data-el="review-play"
+          aria-label="הפעלת הסרטון"
+          hidden
+        ></button>
+        <div class="cam-bottom" data-el="record-wrap">
+          <button
+            type="button"
+            class="rec-btn"
+            data-el="record"
+            aria-label="הקלטה"
+          >
+            <span class="rec-inner"></span>
+          </button>
+        </div>
+        <div class="review-actions" data-el="review-actions" hidden>
+          <button type="button" class="cta" data-el="accept">המשך</button>
+          <button type="button" class="text-btn" data-el="rerecord">
+            צילום מחדש
+          </button>
+        </div>
+      </section>
+
+      <section class="screen screen-details" data-screen="details" hidden>
+        <form class="details-form" data-el="details-form" novalidate>
+          <!-- VIDBX: one orienting line. Not a field. Cut it if it bothers. -->
+          <h2 class="details-title">עוד רגע וסיימנו.</h2>
+          <label>
+            השם שלך
+            <input
+              type="text"
+              name="name"
+              autocomplete="name"
+              enterkeyhint="next"
+              required
+            />
+          </label>
+          <label>
+            אימייל
+            <input
+              type="email"
+              name="email"
+              inputmode="email"
+              autocomplete="email"
+              enterkeyhint="done"
+              required
+            />
+          </label>
+          <label class="consent">
+            <input type="checkbox" name="consent" required />
+            <span>אני מאשר/ת להשתמש בסרטון למטרות פרסום.</span>
+          </label>
+          <p class="cam-error" data-el="details-error" hidden></p>
+          <button type="submit" class="cta" data-el="submit">שליחה</button>
+        </form>
+      </section>
+
+      <section class="screen screen-thanks" data-screen="thanks" hidden>
+        <div class="thanks-inner">
+          <p class="thanks-line">תודה.</p>
+          <!-- VIDBX: one quiet confirmation line. Cut if not wanted. -->
+          <p class="thanks-sub">הסרטון נשלח. אפשר לסגור.</p>
+          <a class="thanks-link" data-el="thanks-link" hidden></a>
+          <p class="vidbx-mark" data-el="vidbx-mark" hidden>Vidbx</p>
+        </div>
+      </section>
+    </div>
+    <script>
+      window.SLOTS = __SLOTS__;
+    </script>
+    <script src="/app.js?v=20260901-noline"></script>
+  </body>
+</html>
